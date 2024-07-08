@@ -21,10 +21,11 @@ const SignUpForm = () => {
     resolver: zodResolver(AuthCredentialsValidaor),
   });
 
-  const { data } = trpc.anyApiRoute.useQuery();
-  console.log(data);
+  const { mutate, isLoading } = trpc.auth.createPayloadUser.useMutation({});
 
-  const onsubmit = ({ email, password }: TAuthCredentialsValidaor) => {};
+  const onsubmit = ({ email, password }: TAuthCredentialsValidaor) => {
+    mutate({ email, password });
+  };
 
   return (
     <form onSubmit={handleSubmit(onsubmit)}>
@@ -45,6 +46,7 @@ const SignUpForm = () => {
           <Label htmlFor="password">Password</Label>
           <Input
             id="password"
+            type="password"
             {...register("password")}
             className={cn({
               "focus-visible:ring-red-500": errors.password,
